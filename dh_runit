@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use File::Find;
+use Debian::Debhelper::Dh_Lib;
+
+init();
+
+foreach my $package (@{$dh{DOPACKAGES}}) {
+        my $file=pkgfile($package, "runit");
+	my $tmp=tmpdir($package);
+	my @install;
+	if ($file) {
+	    @install = filedoublearray($file);
+	}
+
+        foreach my $set (@install) {
+	    if (@$set < 2) {
+		error("missing destination in $file");
+	    }
+
+	    my $dst = pop @$set;
+	    my $src = pop @$set;
+
+	    # Make the needed directory:
+	    my $path = $tmp."/etc/runit/runsvdir/default/".$dst;
+	    install_dir($path);
+
+	    # copy the file to where it should belong
+	    install_prog($src, $path."/run");
+
+	    # Add needed symlinks
+	    make_symlink("/etc/runit/runsvdir/default/".$dst."/supervise","/run/runit/".$dst, $tmp);
+	}
+}
