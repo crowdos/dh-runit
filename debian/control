@@ -1,0 +1,13 @@
+Source: dh-runit
+Section: devel
+Priority: extra
+Maintainer: Mohammed Sameer <msameer@foolab.org>
+Build-Depends: debhelper (>= 9),
+Standards-Version: 3.9.6
+
+Package: dh-runit
+Architecture: all
+Depends: perl, debhelper
+Description: debhelper command to for installing runit services
+ debhelper command to ease the pain of installing runit services
+ and creating needed directory structure and symbolic links
