@@ -25,12 +25,23 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 	    # Make the needed directory:
 	    my $path = $tmp."/etc/runit/runsvdir/default/".$dst;
-	    install_dir($path);
+
+# TODO: enable after jessie
+# 	    install_dir($path);
+	    if ( ! -d "$path") {
+		doit("install","-d","$path");
+	    }
+
 
 	    # copy the file to where it should belong
-	    install_prog($src, $path."/run");
+# TODO: enable after jessie
+#	    install_prog($src, $path."/run");
+
+	    doit("install","-p","-m755",$src,"$path/run");
 
 	    # Add needed symlinks
-	    make_symlink("/etc/runit/runsvdir/default/".$dst."/supervise","/run/runit/".$dst, $tmp);
+# TODO: enable after jessie
+#	    make_symlink("/etc/runit/runsvdir/default/".$dst."/supervise","/run/runit/".$dst, $tmp);
+	    doit("ln","-sf", "/run/runit/".$dst, "$tmp/etc/runit/runsvdir/default/".$dst."/supervise");
 	}
 }
